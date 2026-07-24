@@ -1,0 +1,91 @@
+name: Bug report
+description: Something is broken or behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this! Please fill everything in — without the versions
+        and the log file we usually cannot reproduce the problem.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before reporting
+      options:
+        - label: I am using a build from **Releases** or **Modrinth** (not a `-dev` jar built from source)
+          required: true
+        - label: The server I played on runs **Simple Voice Chat**
+          required: true
+        - label: I searched the existing issues and this is not a duplicate
+          required: true
+
+  - type: input
+    id: mc-version
+    attributes:
+      label: Minecraft version
+      placeholder: "1.21.11"
+    validations:
+      required: true
+
+  - type: input
+    id: mod-version
+    attributes:
+      label: Voice Chat Visualizer version
+      description: Shown in Mod Menu, or the jar file name.
+      placeholder: "1.0.0+1.21.11"
+    validations:
+      required: true
+
+  - type: input
+    id: svc-version
+    attributes:
+      label: Simple Voice Chat version
+      placeholder: "2.6.20"
+    validations:
+      required: true
+
+  - type: input
+    id: loader-version
+    attributes:
+      label: Fabric Loader and Fabric API version
+      placeholder: "Loader 0.19.3, API 0.141.4+1.21.11"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected to happen instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Join a server running Simple Voice Chat
+        2. Someone starts talking nearby
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log file
+      description: >
+        Attach `logs/latest.log` (and the crash report from `crash-reports/` if the game crashed).
+        Drag the file into this box, or paste a link to a paste service.
+    validations:
+      required: true
+
+  - type: textarea
+    id: other-mods
+    attributes:
+      label: Other mods installed
+      description: Optional, but very helpful if another mod is involved.
+    validations:
+      required: false

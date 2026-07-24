@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Download and mod page
+    url: https://modrinth.com/mod/voice-chat-visualizer
+    about: Downloads, supported Minecraft versions and installation instructions.
+  - name: Simple Voice Chat issues
+    url: https://github.com/henkelmax/simple-voice-chat/issues
+    about: If the problem is with voice chat itself (no audio, connection errors), report it there.
