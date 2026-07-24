@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "svcvisualizer",
+	"version": "${version}",
+	"name": "Voice Chat Visualizer",
+	"description": "Client-side overlay for Simple Voice Chat that shows who is currently speaking near you: face, name and a live speaking waveform. Fully configurable, draggable HUD.",
+	"authors": [
+		"TechWave",
+		"exe_data"
+	],
+	"contact": {
+		"homepage": "https://github.com/Maciej-Borkowski/voice-chat-vizualizer",
+		"sources": "https://github.com/Maciej-Borkowski/voice-chat-vizualizer",
+		"issues": "https://github.com/Maciej-Borkowski/voice-chat-vizualizer/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/svcvisualizer/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"com.techwave.svcvisualizer.VoiceChatVisualizerClient"
+		],
+		"voicechat": [
+			"com.techwave.svcvisualizer.voicechat.VisualizerVoicechatPlugin"
+		],
+		"modmenu": [
+			"com.techwave.svcvisualizer.integration.ModMenuIntegration"
+		]
+	},
+	"depends": {
+		"fabricloader": ">=${loader_version}",
+		"minecraft": "~${minecraft_version}",
+		"java": ">=21",
+		"fabric-api": "*",
+		"voicechat_api": ">=2.6.0"
+	},
+	"recommends": {
+		"modmenu": "*"
+	}
+}

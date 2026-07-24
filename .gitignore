@@ -1,0 +1,33 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+eclipse/
+run/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# private, not published
+JAK-POWSTAWAL-MOD.md
+
+# screenshot working assets (fonts/panorama/skins) — not for the repo
+_ssbuild/
+screenshots/
+
+# local-only working material (press kit, icon variants)
+modrinth/
+icon-options/
+screenshots-real/

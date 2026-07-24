@@ -1,0 +1,82 @@
+plugins {
+	id 'fabric-loom' version '1.17.13'
+	id 'maven-publish'
+}
+
+// Includes the Minecraft version so builds for different game versions never collide,
+// e.g. voice-chat-visualizer-1.0.0+1.21.11.jar
+version = "${project.mod_version}+${project.minecraft_version}"
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	// Simple Voice Chat API
+	maven {
+		name = 'Maxhenkel'
+		url = 'https://maven.maxhenkel.de/repository/public'
+	}
+	// Simple Voice Chat mod (runtime) via Modrinth
+	maven {
+		name = 'Modrinth'
+		url = 'https://api.modrinth.com/maven'
+		content {
+			includeGroup 'maven.modrinth'
+		}
+	}
+	// Mod Menu
+	maven {
+		name = 'Terraformers'
+		url = 'https://maven.terraformersmc.com/'
+	}
+	mavenCentral()
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// --- Simple Voice Chat plugin API ---
+	// Compile against the API...
+	implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
+	// ...ship the real mod at runtime (dev only)...
+	modRuntimeOnly "maven.modrinth:simple-voice-chat:${project.voicechat_version}"
+	// ...and add the Fabric stub so the API classes load in dev (required for api >= 2.6.0).
+	modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}:fabric-stub"
+
+	// --- Mod Menu (config screen entry) ---
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+}
+
+processResources {
+	inputs.property 'version', project.version
+	inputs.property 'minecraft_version', project.minecraft_version
+	inputs.property 'loader_version', project.loader_version
+
+	filesMatching('fabric.mod.json') {
+		expand 'version': project.version,
+				'minecraft_version': project.minecraft_version,
+				'loader_version': project.loader_version
+	}
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+	it.options.encoding = 'UTF-8'
+}
+
+jar {
+	from('LICENSE') {
+		rename { "${it}_${project.archives_base_name}" }
+	}
+}
