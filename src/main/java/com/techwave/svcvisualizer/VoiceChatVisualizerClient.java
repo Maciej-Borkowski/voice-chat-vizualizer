@@ -8,7 +8,7 @@ import com.techwave.svcvisualizer.hud.SpeakerHudRenderer;
 import com.techwave.svcvisualizer.speaker.SpeakerTracker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
@@ -27,9 +27,9 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		ConfigManager.load();
 
 		KeyMapping.Category category = KeyMapping.Category.register(SvcVisualizer.id("general"));
-		openConfigKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		openConfigKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.svcvisualizer.open_config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
-		toggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
+		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.svcvisualizer.toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
 
 		HudElementRegistry.addLast(SvcVisualizer.id("overlay"), (guiGraphics, deltaTracker) -> {
@@ -40,7 +40,7 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (openConfigKey.consumeClick()) {
-				client.setScreen(new VisualizerConfigScreen(client.screen));
+				client.setScreenAndShow(new VisualizerConfigScreen(client.gui.screen()));
 			}
 			while (toggleKey.consumeClick()) {
 				VisualizerConfig config = ConfigManager.get();
@@ -61,16 +61,15 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		}
 		Minecraft mc = Minecraft.getInstance();
 		// The config screen paints its own live preview – don't double-render behind it.
-		if (mc.screen instanceof VisualizerConfigScreen) {
+		if (mc.gui.screen() instanceof VisualizerConfigScreen) {
 			return false;
 		}
-		if (config.respectHudHidden && mc.options.hideGui) {
-			return false;
-		}
+		// Since 26.x there is no Options.hideGui; Fabric's HUD layer is already skipped when the
+		// HUD is hidden (F1), so config.respectHudHidden is honoured automatically.
 		if (config.renderOnlyInGame && mc.level == null) {
 			return false;
 		}
-		if (config.hideWhenChatOpen && mc.screen instanceof ChatScreen) {
+		if (config.hideWhenChatOpen && mc.gui.screen() instanceof ChatScreen) {
 			return false;
 		}
 		return true;

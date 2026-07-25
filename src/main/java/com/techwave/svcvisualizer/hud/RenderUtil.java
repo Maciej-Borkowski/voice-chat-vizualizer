@@ -1,7 +1,7 @@
 package com.techwave.svcvisualizer.hud;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.world.entity.player.PlayerSkin;
 
 /** Small drawing helpers shared by the overlay and the config preview. */
@@ -24,7 +24,7 @@ public final class RenderUtil {
 	}
 
 	/** Filled rectangle with (approximately) rounded corners. */
-	public static void fillRoundedRect(GuiGraphics g, int x1, int y1, int x2, int y2, int radius, int color) {
+	public static void fillRoundedRect(GuiGraphicsExtractor g, int x1, int y1, int x2, int y2, int radius, int color) {
 		if (radius <= 0) {
 			g.fill(x1, y1, x2, y2, color);
 			return;
@@ -52,7 +52,7 @@ public final class RenderUtil {
 	}
 
 	/** 1px border around a rectangle. */
-	public static void drawBorder(GuiGraphics g, int x1, int y1, int x2, int y2, int color) {
+	public static void drawBorder(GuiGraphicsExtractor g, int x1, int y1, int x2, int y2, int color) {
 		g.fill(x1, y1, x2, y1 + 1, color);
 		g.fill(x1, y2 - 1, x2, y2, color);
 		g.fill(x1, y1 + 1, x1 + 1, y2 - 1, color);
@@ -60,8 +60,8 @@ public final class RenderUtil {
 	}
 
 	/** Draw a player head (base + hat) at the given position, tinted with the given alpha. */
-	public static void drawHead(GuiGraphics g, PlayerSkin skin, int x, int y, int size, float alpha) {
+	public static void drawHead(GuiGraphicsExtractor g, PlayerSkin skin, int x, int y, int size, float alpha) {
 		int tint = argb(0xFFFFFF, alpha);
-		PlayerFaceRenderer.draw(g, skin, x, y, size, tint);
+		PlayerFaceExtractor.extractRenderState(g, skin, x, y, size, tint);
 	}
 }

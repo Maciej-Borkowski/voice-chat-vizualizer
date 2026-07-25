@@ -1,7 +1,7 @@
 package com.techwave.svcvisualizer.gui;
 
 import com.techwave.svcvisualizer.gui.widget.OptionSlider;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
@@ -106,17 +106,17 @@ public class ColorPickerScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float delta) {
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
 		// Manual dim (no blur – see VisualizerConfigScreen) then widgets, then labels on top.
 		g.fill(0, 0, this.width, this.height, 0xC0101014);
 		for (GuiEventListener child : this.children()) {
 			if (child instanceof Renderable r) {
-				r.render(g, mouseX, mouseY, delta);
+				r.extractRenderState(g, mouseX, mouseY, delta);
 			}
 		}
 		int cx = this.width / 2;
 		int y = this.height / 2 - 60;
-		g.drawCenteredString(this.font, this.title, cx, y - 40, 0xFFFFFFFF);
+		g.centeredText(this.font, this.title, cx, y - 40, 0xFFFFFFFF);
 
 		// Preview swatch.
 		int sw = 30;
@@ -127,7 +127,7 @@ public class ColorPickerScreen extends Screen {
 
 	@Override
 	public void onClose() {
-		this.minecraft.setScreen(parent);
+		this.minecraft.setScreenAndShow(parent);
 	}
 
 	// ---- colour maths ----

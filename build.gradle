@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.17.13'
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -36,20 +36,26 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	// Minecraft 26.1+ ships unobfuscated (real names baked into the jar), so there are no
+	// obfuscation mappings and Loom drops the `mod*` remapping configurations entirely —
+	// dependencies are added with plain `implementation` / `runtimeOnly`, no `mappings` line.
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	// The fabric-api meta only exposes a subset of modules on the compile classpath. In the 26.x
+	// (unobfuscated) era the key-binding module was renamed to fabric-key-mapping-api-v1
+	// (KeyMappingHelper.registerKeyMapping); declare it explicitly to compile against it.
+	implementation "net.fabricmc.fabric-api:fabric-key-mapping-api-v1:${project.keymapping_version}"
 
 	// --- Simple Voice Chat plugin API ---
 	// Compile against the API...
 	implementation "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}"
 	// ...ship the real mod at runtime (dev only)...
-	modRuntimeOnly "maven.modrinth:simple-voice-chat:${project.voicechat_version}"
+	runtimeOnly "maven.modrinth:simple-voice-chat:${project.voicechat_version}"
 	// ...and add the Fabric stub so the API classes load in dev (required for api >= 2.6.0).
-	modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}:fabric-stub"
+	runtimeOnly "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}:fabric-stub"
 
 	// --- Mod Menu (config screen entry) ---
-	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	implementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -66,12 +72,12 @@ processResources {
 
 java {
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 	it.options.encoding = 'UTF-8'
 }
 

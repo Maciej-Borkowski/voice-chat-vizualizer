@@ -1,7 +1,7 @@
 package com.techwave.svcvisualizer.hud;
 
 import com.techwave.svcvisualizer.config.IndicatorStyle;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * Draws the "is speaking" indicator inside a box. Its animation is driven by wall-clock time and its
@@ -12,7 +12,7 @@ public final class SpeakingIndicator {
 	private SpeakingIndicator() {
 	}
 
-	public static void render(GuiGraphics g, IndicatorStyle style, int x, int y, int w, int h,
+	public static void render(GuiGraphicsExtractor g, IndicatorStyle style, int x, int y, int w, int h,
 	                          float level, int rgb, float alpha, long now) {
 		int color = RenderUtil.argb(rgb, alpha);
 		float lv = Math.max(0f, Math.min(1f, level));
@@ -23,7 +23,7 @@ public final class SpeakingIndicator {
 		}
 	}
 
-	private static void wave(GuiGraphics g, int x, int y, int w, int h, float level, int color, long now) {
+	private static void wave(GuiGraphicsExtractor g, int x, int y, int w, int h, float level, int color, long now) {
 		int mid = y + h / 2;
 		double amp = (h / 2.0 - 1.0) * (0.20 + 0.80 * level);
 		double freq = (2.0 * Math.PI * 2.0) / Math.max(1, w);
@@ -39,7 +39,7 @@ public final class SpeakingIndicator {
 		}
 	}
 
-	private static void bars(GuiGraphics g, int x, int y, int w, int h, float level, int color, long now) {
+	private static void bars(GuiGraphicsExtractor g, int x, int y, int w, int h, float level, int color, long now) {
 		int count = 4;
 		int gap = 1;
 		int bw = Math.max(1, (w - (count - 1) * gap) / count);
@@ -52,7 +52,7 @@ public final class SpeakingIndicator {
 		}
 	}
 
-	private static void dot(GuiGraphics g, int x, int y, int w, int h, float level, int color, long now) {
+	private static void dot(GuiGraphicsExtractor g, int x, int y, int w, int h, float level, int color, long now) {
 		double pulse = 0.5 + 0.5 * Math.sin(now / 170.0);
 		double s = (0.45 + 0.55 * level) * (0.7 + 0.3 * pulse);
 		int size = Math.max(2, (int) Math.round(Math.min(w, h) * s));

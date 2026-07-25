@@ -10,7 +10,7 @@ import com.techwave.svcvisualizer.speaker.SpeakerState;
 import com.techwave.svcvisualizer.speaker.SpeakerTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
@@ -36,7 +36,7 @@ public final class SpeakerHudRenderer {
 	}
 
 	/** Render the overlay using the live config and the current speaker snapshot. */
-	public static void renderOverlay(GuiGraphics g, long now) {
+	public static void renderOverlay(GuiGraphicsExtractor g, long now) {
 		VisualizerConfig c = ConfigManager.get();
 		Minecraft mc = Minecraft.getInstance();
 		Font font = mc.font;
@@ -167,7 +167,7 @@ public final class SpeakerHudRenderer {
 
 	// ------------------------------------------------------------------ drawing
 
-	private static void drawRow(GuiGraphics g, VisualizerConfig c, Font font, Minecraft mc,
+	private static void drawRow(GuiGraphicsExtractor g, VisualizerConfig c, Font font, Minecraft mc,
 	                            RowLayout row, long now) {
 		float alpha = row.alpha;
 		if (alpha <= 0f) {
@@ -219,13 +219,13 @@ public final class SpeakerHudRenderer {
 			int textY = y1 + (row.height - textHeight) / 2;
 			int color = RenderUtil.argb(c.nameColor, alpha);
 			if (c.nameScale == 1.0) {
-				g.drawString(font, row.label, cx, textY, color, true);
+				g.text(font, row.label, cx, textY, color, true);
 			} else {
 				Matrix3x2fStack pose = g.pose();
 				pose.pushMatrix();
 				pose.translate(cx, textY);
 				pose.scale((float) c.nameScale, (float) c.nameScale);
-				g.drawString(font, row.label, 0, 0, color, true);
+				g.text(font, row.label, 0, 0, color, true);
 				pose.popMatrix();
 			}
 			cx += row.nameWidth;
@@ -245,13 +245,13 @@ public final class SpeakerHudRenderer {
 		}
 	}
 
-	private static void drawOverflow(GuiGraphics g, VisualizerConfig c, Font font,
+	private static void drawOverflow(GuiGraphicsExtractor g, VisualizerConfig c, Font font,
 	                                 LayoutResult layout, int overflow) {
 		String text = "+" + overflow;
 		int w = font.width(text);
 		int x = (c.alignment == Alignment.LEFT) ? layout.blockX1 + c.innerPadding : layout.blockX2 - c.innerPadding - w;
 		int y = (c.stackDirection == StackDirection.DOWN) ? layout.blockY2 + 2 : layout.blockY1 - font.lineHeight - 2;
-		g.drawString(font, text, x, y, RenderUtil.argb(c.nameColor, 0.85f), true);
+		g.text(font, text, x, y, RenderUtil.argb(c.nameColor, 0.85f), true);
 	}
 
 	// ------------------------------------------------------------------ helpers

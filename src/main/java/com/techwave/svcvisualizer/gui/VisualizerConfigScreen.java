@@ -11,7 +11,7 @@ import com.techwave.svcvisualizer.gui.widget.OptionSlider;
 import com.techwave.svcvisualizer.hud.RenderUtil;
 import com.techwave.svcvisualizer.hud.SpeakerHudRenderer;
 import com.techwave.svcvisualizer.speaker.SpeakerTracker;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -227,7 +227,7 @@ public class VisualizerConfigScreen extends Screen {
 	private void addColor(String key, IntSupplier getter, IntConsumer setter) {
 		Component label = Component.translatable(key).append(Component.literal(String.format(": #%06X", getter.getAsInt() & 0xFFFFFF)));
 		Button btn = Button.builder(label, b ->
-				this.minecraft.setScreen(new ColorPickerScreen(this, key, getter.getAsInt(), rgb -> {
+				this.minecraft.setScreenAndShow(new ColorPickerScreen(this, key, getter.getAsInt(), rgb -> {
 					setter.accept(rgb & 0xFFFFFF);
 					ConfigManager.save();
 				}))).bounds(optionX(), 0, optionW(), 20).build();
@@ -294,8 +294,8 @@ public class VisualizerConfigScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics g, int mouseX, int mouseY, float delta) {
-		// Dim manually (no vanilla blur – it may only be requested once per frame in 1.21.11).
+	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
+		// Dim manually (no vanilla blur – it may only be requested once per frame).
 		g.fill(0, 0, this.width, this.height, 0xC0101014);
 		long now = System.currentTimeMillis();
 
@@ -319,17 +319,17 @@ public class VisualizerConfigScreen extends Screen {
 
 		for (GuiEventListener child : this.children()) {
 			if (child instanceof Renderable r) {
-				r.render(g, mouseX, mouseY, delta);
+				r.extractRenderState(g, mouseX, mouseY, delta);
 			}
 		}
 
-		g.drawString(this.font, this.title, panelX + 2, 10, 0xFFFFFFFF);
+		g.text(this.font, this.title, panelX + 2, 10, 0xFFFFFFFF);
 		drawScrollbar(g);
 		int hintX = panelOnLeft ? panelMaxX + 6 : 6;
-		g.drawString(this.font, Component.translatable("svcvisualizer.config.drag_hint"), hintX, this.height - 14, 0x80FFFFFF);
+		g.text(this.font, Component.translatable("svcvisualizer.config.drag_hint"), hintX, this.height - 14, 0x80FFFFFF);
 	}
 
-	private void drawDragHandle(GuiGraphics g, long now) {
+	private void drawDragHandle(GuiGraphicsExtractor g, long now) {
 		int[] b = SpeakerHudRenderer.lastBounds;
 		if (b == null) {
 			return;
@@ -339,7 +339,7 @@ public class VisualizerConfigScreen extends Screen {
 		RenderUtil.drawBorder(g, b[0] - 2, b[1] - 2, b[2] + 2, b[3] + 2, color);
 	}
 
-	private void drawScrollbar(GuiGraphics g) {
+	private void drawScrollbar(GuiGraphicsExtractor g) {
 		int total = optionWidgets.size();
 		if (total <= visibleRows) {
 			return;
@@ -414,7 +414,7 @@ public class VisualizerConfigScreen extends Screen {
 	public void onClose() {
 		ConfigManager.save();
 		SpeakerTracker.INSTANCE.setTestMode(false);
-		this.minecraft.setScreen(parent);
+		this.minecraft.setScreenAndShow(parent);
 	}
 
 	@Override
