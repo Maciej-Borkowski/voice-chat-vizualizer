@@ -4,11 +4,14 @@ import com.techwave.svcvisualizer.speaker.AudioLevel;
 import com.techwave.svcvisualizer.speaker.SpeakerTracker;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.events.ClientReceiveSoundEvent;
+import de.maxhenkel.voicechat.api.events.ClientSoundEvent;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
+import net.minecraft.client.Minecraft;
 
 /**
- * Simple Voice Chat plugin entrypoint. Listens (read-only) to every incoming audio packet and feeds
- * the speaker tracker so the overlay knows who we can currently hear.
+ * Simple Voice Chat plugin entrypoint. Listens (read-only) to every incoming audio packet so the
+ * overlay knows who we can hear, plus our own outgoing microphone ({@link ClientSoundEvent}) so
+ * "show me when I am speaking" works – scaled to the real input volume, like everyone else.
  */
 public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 
@@ -18,21 +21,11 @@ public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 	}
 
 	@Override
-	public void initialize(de.maxhenkel.voicechat.api.VoicechatApi api) {
-		// On the client the API is a VoicechatClientApi - keep it so we can poll the local microphone.
-		if (api instanceof de.maxhenkel.voicechat.api.VoicechatClientApi clientApi) {
-			SelfSpeaking.setClientApi(clientApi);
-		}
-	}
-	@Override
 	public void registerEvents(EventRegistration registration) {
-		// Canonical way to obtain the client-side API (fires when voice chat connects). Belt-and-braces
-		// with initialize() above so we reliably capture it for the local-microphone poll.
-		registration.registerEvent(de.maxhenkel.voicechat.api.events.ClientVoicechatInitializationEvent.class,
-				e -> SelfSpeaking.setClientApi(e.getVoicechat()));
 		registration.registerEvent(ClientReceiveSoundEvent.EntitySound.class, this::onEntitySound);
 		registration.registerEvent(ClientReceiveSoundEvent.LocationalSound.class, this::onLocationalSound);
 		registration.registerEvent(ClientReceiveSoundEvent.StaticSound.class, this::onStaticSound);
+		registration.registerEvent(ClientSoundEvent.class, this::onClientSound);
 	}
 
 	/** Proximity voice tied to a player entity – the common case. */
@@ -60,5 +53,17 @@ public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 				false,
 				0.0,
 				AudioLevel.rms(event.getRawAudio()));
+	}
+
+	/** Our own microphone – shows us speaking, with the wave scaled to the real input volume. */
+	private void onClientSound(ClientSoundEvent event) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player != null) {
+			SpeakerTracker.INSTANCE.mark(
+					mc.player.getUUID(),
+					event.isWhispering(),
+					0.0,
+					AudioLevel.rms(event.getRawAudio()));
+		}
 	}
 }
