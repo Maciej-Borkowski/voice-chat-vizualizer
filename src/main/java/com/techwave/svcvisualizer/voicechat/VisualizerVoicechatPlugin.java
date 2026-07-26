@@ -26,6 +26,10 @@ public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 	}
 	@Override
 	public void registerEvents(EventRegistration registration) {
+		// Canonical way to obtain the client-side API (fires when voice chat connects). Belt-and-braces
+		// with initialize() above so we reliably capture it for the local-microphone poll.
+		registration.registerEvent(de.maxhenkel.voicechat.api.events.ClientVoicechatInitializationEvent.class,
+				e -> SelfSpeaking.setClientApi(e.getVoicechat()));
 		registration.registerEvent(ClientReceiveSoundEvent.EntitySound.class, this::onEntitySound);
 		registration.registerEvent(ClientReceiveSoundEvent.LocationalSound.class, this::onLocationalSound);
 		registration.registerEvent(ClientReceiveSoundEvent.StaticSound.class, this::onStaticSound);
