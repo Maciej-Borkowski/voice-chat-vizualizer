@@ -219,7 +219,7 @@ public class VisualizerConfigScreen extends Screen {
 	}
 
 	private <E extends Enum<E>> void addEnum(String key, E[] values, E initial, Consumer<E> setter, Function<E, Component> nameFn) {
-		CycleButton<E> btn = CycleButton.builder(nameFn, initial).withValues(values)
+		CycleButton<E> btn = CycleButton.builder(nameFn).withValues(values).withInitialValue(initial)
 				.create(optionX(), 0, optionW(), 20, Component.translatable(key), (b, val) -> setter.accept(val));
 		addOption(btn);
 	}
