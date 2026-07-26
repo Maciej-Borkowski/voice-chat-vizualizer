@@ -26,7 +26,7 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		ConfigManager.load();
 
-		KeyMapping.Category category = KeyMapping.Category.register(SvcVisualizer.id("general"));
+		String category = "key.categories.svcvisualizer.general";
 		openConfigKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(
 				"key.svcvisualizer.open_config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
 		toggleKey = KeyBindingHelper.registerKeyBinding(new KeyMapping(

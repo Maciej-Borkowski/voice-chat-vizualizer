@@ -2,7 +2,7 @@ package com.techwave.svcvisualizer.hud;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerFaceRenderer;
-import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.client.resources.PlayerSkin;
 
 /** Small drawing helpers shared by the overlay and the config preview. */
 public final class RenderUtil {

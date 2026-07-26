@@ -18,7 +18,6 @@ import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -361,10 +360,8 @@ public class VisualizerConfigScreen extends Screen {
 	}
 
 	@Override
-	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-		double mouseX = event.x();
-		double mouseY = event.y();
-		if (event.button() == 0 && inFreeArea(mouseX)) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		if (button == 0 && inFreeArea(mouseX)) {
 			int[] b = SpeakerHudRenderer.lastBounds;
 			if (b != null && mouseX >= b[0] - 3 && mouseX <= b[2] + 3 && mouseY >= b[1] - 3 && mouseY <= b[3] + 3) {
 				dragging = true;
@@ -376,28 +373,28 @@ public class VisualizerConfigScreen extends Screen {
 				return true;
 			}
 		}
-		return super.mouseClicked(event, doubleClick);
+		return super.mouseClicked(mouseX, mouseY, button);
 	}
 
 	@Override
-	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
 		if (dragging) {
 			VisualizerConfig c = ConfigManager.get();
-			c.x = clamp01(dragStartX + (event.x() - dragStartMouseX) / this.width);
-			c.y = clamp01(dragStartY + (event.y() - dragStartMouseY) / this.height);
+			c.x = clamp01(dragStartX + (mouseX - dragStartMouseX) / this.width);
+			c.y = clamp01(dragStartY + (mouseY - dragStartMouseY) / this.height);
 			return true;
 		}
-		return super.mouseDragged(event, dragX, dragY);
+		return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
 	}
 
 	@Override
-	public boolean mouseReleased(MouseButtonEvent event) {
-		if (dragging && event.button() == 0) {
+	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+		if (dragging && button == 0) {
 			dragging = false;
 			ConfigManager.save();
 			return true;
 		}
-		return super.mouseReleased(event);
+		return super.mouseReleased(mouseX, mouseY, button);
 	}
 
 	@Override

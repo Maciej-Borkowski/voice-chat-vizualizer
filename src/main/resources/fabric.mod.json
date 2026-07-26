@@ -32,7 +32,7 @@
 		"minecraft": "~${minecraft_version}",
 		"java": ">=21",
 		"fabric-api": "*",
-		"voicechat_api": ">=2.6.0"
+		"voicechat_api": ">=2.5.0"
 	},
 	"recommends": {
 		"modmenu": "*"

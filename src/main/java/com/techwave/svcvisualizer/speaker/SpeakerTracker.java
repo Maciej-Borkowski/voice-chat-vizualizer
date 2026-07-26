@@ -141,8 +141,8 @@ public final class SpeakerTracker {
 		ClientPacketListener connection = Minecraft.getInstance().getConnection();
 		if (connection != null) {
 			PlayerInfo info = connection.getPlayerInfo(s.id);
-			if (info != null && info.getProfile() != null && info.getProfile().name() != null) {
-				return info.getProfile().name();
+			if (info != null && info.getProfile() != null && info.getProfile().getName() != null) {
+				return info.getProfile().getName();
 			}
 		}
 		String u = s.id.toString();
@@ -161,7 +161,7 @@ public final class SpeakerTracker {
 		ClientPacketListener connection = Minecraft.getInstance().getConnection();
 		if (connection != null) {
 			for (PlayerInfo info : connection.getOnlinePlayers()) {
-				real.add(info.getProfile().id());
+				real.add(info.getProfile().getId());
 				if (real.size() >= 4) {
 					break;
 				}

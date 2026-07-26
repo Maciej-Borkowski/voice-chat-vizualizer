@@ -46,7 +46,6 @@ dependencies {
 	// ...ship the real mod at runtime (dev only)...
 	modRuntimeOnly "maven.modrinth:simple-voice-chat:${project.voicechat_version}"
 	// ...and add the Fabric stub so the API classes load in dev (required for api >= 2.6.0).
-	modRuntimeOnly "de.maxhenkel.voicechat:voicechat-api:${project.voicechat_api_version}:fabric-stub"
 
 	// --- Mod Menu (config screen entry) ---
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
