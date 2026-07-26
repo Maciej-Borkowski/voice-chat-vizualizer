@@ -5,7 +5,7 @@ plugins {
 
 // Includes the Minecraft version so builds for different game versions never collide,
 // e.g. voice-chat-visualizer-1.0.0+1.21.11.jar
-version = "${project.mod_version}+${project.minecraft_version}"
+version = "${project.mod_version}+1.21-1.21.5"
 group = project.maven_group
 
 base {

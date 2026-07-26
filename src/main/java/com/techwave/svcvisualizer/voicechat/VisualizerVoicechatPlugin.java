@@ -31,7 +31,7 @@ public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 	/** Proximity voice tied to a player entity – the common case. */
 	private void onEntitySound(ClientReceiveSoundEvent.EntitySound event) {
 		SpeakerTracker.INSTANCE.mark(
-				event.getEntityId(),
+				event.getId(),
 				event.isWhispering(),
 				event.getDistance(),
 				AudioLevel.rms(event.getRawAudio()));
