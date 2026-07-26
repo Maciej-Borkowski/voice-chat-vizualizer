@@ -40,7 +40,7 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (openConfigKey.consumeClick()) {
-				client.setScreenAndShow(new VisualizerConfigScreen(client.gui.screen()));
+				client.setScreenAndShow(new VisualizerConfigScreen(client.screen));
 			}
 			while (toggleKey.consumeClick()) {
 				VisualizerConfig config = ConfigManager.get();
@@ -61,7 +61,7 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		}
 		Minecraft mc = Minecraft.getInstance();
 		// The config screen paints its own live preview – don't double-render behind it.
-		if (mc.gui.screen() instanceof VisualizerConfigScreen) {
+		if (mc.screen instanceof VisualizerConfigScreen) {
 			return false;
 		}
 		// Since 26.x there is no Options.hideGui; Fabric's HUD layer is already skipped when the
@@ -69,7 +69,7 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		if (config.renderOnlyInGame && mc.level == null) {
 			return false;
 		}
-		if (config.hideWhenChatOpen && mc.gui.screen() instanceof ChatScreen) {
+		if (config.hideWhenChatOpen && mc.screen instanceof ChatScreen) {
 			return false;
 		}
 		return true;
