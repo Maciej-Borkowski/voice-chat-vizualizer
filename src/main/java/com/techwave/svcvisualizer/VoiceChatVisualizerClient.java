@@ -39,8 +39,6 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		});
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			// Detect our own microphone so "show me when I am speaking" works (SVC never echoes it back).
-			com.techwave.svcvisualizer.voicechat.SelfSpeaking.poll();
 			while (openConfigKey.consumeClick()) {
 				client.setScreen(new VisualizerConfigScreen(client.screen));
 			}
