@@ -18,6 +18,13 @@ public class VisualizerVoicechatPlugin implements VoicechatPlugin {
 	}
 
 	@Override
+	public void initialize(de.maxhenkel.voicechat.api.VoicechatApi api) {
+		// On the client the API is a VoicechatClientApi - keep it so we can poll the local microphone.
+		if (api instanceof de.maxhenkel.voicechat.api.VoicechatClientApi clientApi) {
+			SelfSpeaking.setClientApi(clientApi);
+		}
+	}
+	@Override
 	public void registerEvents(EventRegistration registration) {
 		registration.registerEvent(ClientReceiveSoundEvent.EntitySound.class, this::onEntitySound);
 		registration.registerEvent(ClientReceiveSoundEvent.LocationalSound.class, this::onLocationalSound);
