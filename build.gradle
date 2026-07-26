@@ -3,9 +3,9 @@ plugins {
 	id 'maven-publish'
 }
 
-// Includes the Minecraft version so builds for different game versions never collide,
-// e.g. voice-chat-visualizer-1.0.0+1.21.11.jar
-version = "${project.mod_version}+${project.minecraft_version}"
+// Single build for the whole 26.1.x line: compiled against ${project.minecraft_version}
+// but labelled 26.1.x and (via fabric.mod.json ~26.1) compatible with 26.1 / 26.1.1 / 26.1.2.
+version = "${project.mod_version}+26.1.x"
 group = project.maven_group
 
 base {
