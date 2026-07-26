@@ -22,7 +22,6 @@ public final class SelfSpeaking {
 	private static volatile VoicechatClientApi api;
 	private static Method isTalking;
 	private static Method isWhispering;
-	private static boolean resolved;
 
 	private SelfSpeaking() {
 	}
@@ -30,26 +29,21 @@ public final class SelfSpeaking {
 	/** Called from the plugin's {@code initialize} with the client-side voice chat API. */
 	public static void setClientApi(VoicechatClientApi clientApi) {
 		api = clientApi;
-		resolved = false;
+		isTalking = lookup(clientApi, "isTalking");
+		isWhispering = lookup(clientApi, "isWhispering");
+		com.techwave.svcvisualizer.SvcVisualizer.LOGGER.info("Local speaking detection {}",
+				isTalking != null ? "enabled" : "unavailable (Simple Voice Chat < 2.6.0)");
 	}
 
 	/** Poll once per client tick; marks the local player as speaking while the microphone is live. */
 	public static void poll() {
 		VoicechatClientApi a = api;
-		if (a == null) {
-			return;
+		if (a == null || isTalking == null) {
+			return; // No API yet, or Simple Voice Chat < 2.6.0 (no local microphone state).
 		}
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null) {
 			return;
-		}
-		if (!resolved) {
-			resolved = true;
-			isTalking = lookup(a, "isTalking");
-			isWhispering = lookup(a, "isWhispering");
-		}
-		if (isTalking == null) {
-			return; // Simple Voice Chat < 2.6.0 – no local microphone state available.
 		}
 		try {
 			if (Boolean.TRUE.equals(isTalking.invoke(a))) {
