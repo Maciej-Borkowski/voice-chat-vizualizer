@@ -61,7 +61,6 @@ public final class RenderUtil {
 
 	/** Draw a player head (base + hat) at the given position, tinted with the given alpha. */
 	public static void drawHead(GuiGraphics g, PlayerSkin skin, int x, int y, int size, float alpha) {
-		int tint = argb(0xFFFFFF, alpha);
-		PlayerFaceRenderer.draw(g, skin, x, y, size, tint);
+		PlayerFaceRenderer.draw(g, skin, x, y, size);
 	}
 }

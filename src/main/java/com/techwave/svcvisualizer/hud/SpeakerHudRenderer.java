@@ -15,7 +15,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
-import org.joml.Matrix3x2fStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -221,12 +221,12 @@ public final class SpeakerHudRenderer {
 			if (c.nameScale == 1.0) {
 				g.drawString(font, row.label, cx, textY, color, true);
 			} else {
-				Matrix3x2fStack pose = g.pose();
-				pose.pushMatrix();
-				pose.translate(cx, textY);
-				pose.scale((float) c.nameScale, (float) c.nameScale);
+				PoseStack pose = g.pose();
+				pose.pushPose();
+				pose.translate((float) cx, (float) textY, 0f);
+				pose.scale((float) c.nameScale, (float) c.nameScale, 1f);
 				g.drawString(font, row.label, 0, 0, color, true);
-				pose.popMatrix();
+				pose.popPose();
 			}
 			cx += row.nameWidth;
 			first = false;
