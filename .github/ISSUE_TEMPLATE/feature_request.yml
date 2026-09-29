@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest a new option or an improvement
+labels: ["enhancement"]
+body:
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Before suggesting
+      options:
+        - label: I searched the existing issues and this has not been suggested yet
+          required: true
+        - label: I checked the configurator (press **V**) and this option does not already exist
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the situation where the mod falls short today.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to happen?
+      description: Describe the option or behaviour you have in mind.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+    validations:
+      required: false

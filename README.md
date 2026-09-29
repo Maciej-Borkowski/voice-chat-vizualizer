@@ -5,6 +5,8 @@ you** in [Simple Voice Chat](https://modrinth.com/plugin/simple-voice-chat): the
 and a live **speaking indicator** (a sine wave that reacts to how loud they talk). When several people
 are around you, you instantly see who is talking.
 
+![Overlay showing who is speaking: player face, name and a live sine-wave indicator](screenshots/overlay-only.png)
+
 ---
 
 ## Features
@@ -27,6 +29,20 @@ are around you, you instantly see who is talking.
 - **Keybinds** — open the configurator (default **V**) and toggle the overlay.
 - **Mod Menu** integration.
 - **English and Polish** translations built in.
+
+## Screenshots
+
+**Position** — drag the overlay anywhere on screen; the settings panel moves to the opposite side.
+
+![Configurator, Position tab, with a live draggable preview of the overlay](screenshots/config-position.png)
+
+**Appearance** — face size, name scale, indicator style, background and border.
+
+![Configurator, Appearance tab, showing appearance sliders and toggles](screenshots/config-appearance.png)
+
+**Colors** — HSV + hex colour pickers for every part of the overlay.
+
+![Configurator, Colors tab, showing colour options](screenshots/config-colors.png)
 
 ## How it works
 
