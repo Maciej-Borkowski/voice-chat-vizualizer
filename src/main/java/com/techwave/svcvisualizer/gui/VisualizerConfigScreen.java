@@ -1,5 +1,6 @@
 package com.techwave.svcvisualizer.gui;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.techwave.svcvisualizer.config.Alignment;
 import com.techwave.svcvisualizer.config.ConfigManager;
 import com.techwave.svcvisualizer.config.DistanceDisplay;
@@ -364,7 +365,8 @@ public class VisualizerConfigScreen extends Screen {
 	public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
 		double mouseX = event.x();
 		double mouseY = event.y();
-		if (event.button() == 0 && inFreeArea(mouseX)) {
+		// 26.3 moved input from GLFW to SDL: the left button is 1 now, not 0 – use the constant.
+		if (event.button() == InputConstants.MOUSE_BUTTON_LEFT && inFreeArea(mouseX)) {
 			int[] b = SpeakerHudRenderer.lastBounds;
 			if (b != null && mouseX >= b[0] - 3 && mouseX <= b[2] + 3 && mouseY >= b[1] - 3 && mouseY <= b[3] + 3) {
 				dragging = true;
@@ -392,7 +394,7 @@ public class VisualizerConfigScreen extends Screen {
 
 	@Override
 	public boolean mouseReleased(MouseButtonEvent event) {
-		if (dragging && event.button() == 0) {
+		if (dragging && event.button() == InputConstants.MOUSE_BUTTON_LEFT) {
 			dragging = false;
 			ConfigManager.save();
 			return true;

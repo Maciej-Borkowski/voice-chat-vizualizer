@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ChatScreen;
-import org.lwjgl.glfw.GLFW;
 
 /** Client entrypoint: loads config, registers the overlay HUD element, keybinds and lifecycle hooks. */
 public class VoiceChatVisualizerClient implements ClientModInitializer {
@@ -27,10 +26,12 @@ public class VoiceChatVisualizerClient implements ClientModInitializer {
 		ConfigManager.load();
 
 		KeyMapping.Category category = KeyMapping.Category.register(SvcVisualizer.id("general"));
+		// 26.3 replaced GLFW with SDL: there is no org.lwjgl.glfw any more, key codes live in
+		// InputConstants (SDL values) and the KEYSYM/SCANCODE types were merged into KEYBOARD.
 		openConfigKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.svcvisualizer.open_config", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, category));
+				"key.svcvisualizer.open_config", InputConstants.Type.KEYBOARD, InputConstants.KEY_V, category));
 		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-				"key.svcvisualizer.toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), category));
+				"key.svcvisualizer.toggle", InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
 
 		HudElementRegistry.addLast(SvcVisualizer.id("overlay"), (guiGraphics, deltaTracker) -> {
 			if (shouldRenderHud()) {
